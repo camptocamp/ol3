@@ -137,7 +137,8 @@ ol.renderer.canvas.Map.prototype.renderFrame = function(frameState) {
   var i, ii, layer, layerRenderer, layerState;
   for (i = 0, ii = layersArray.length; i < ii; ++i) {
     layer = layersArray[i];
-    layerRenderer = this.getLayerRenderer(layer);
+    layerRenderer =
+        /** @type {ol.renderer.canvas.Layer} */ (this.getLayerRenderer(layer));
     layerState = layerStates[goog.getUid(layer)];
     if (!layerState.visible ||
         layerState.sourceState != ol.source.State.READY ||
