@@ -19,6 +19,8 @@ goog.require('ol.Tile');
 goog.require('ol.css');
 goog.require('ol.layer.Image');
 goog.require('ol.layer.Tile');
+goog.require('ol.render.Event');
+goog.require('ol.render.EventType');
 goog.require('ol.renderer.Map');
 goog.require('ol.renderer.webgl.ImageLayer');
 goog.require('ol.renderer.webgl.TileLayer');
@@ -235,6 +237,23 @@ ol.renderer.webgl.Map.prototype.createLayerRenderer = function(layer) {
 
 
 /**
+ * @param {ol.render.EventType} type Event type.
+ * @param {ol.FrameState} frameState Frame state.
+ * @private
+ */
+ol.renderer.webgl.Map.prototype.dispatchComposeEvent_ =
+    function(type, frameState) {
+  var map = this.getMap();
+  var context = this.getContext();
+  if (map.hasListener(type)) {
+    var composeEvent = new ol.render.Event(
+        type, map, null, frameState, null, context);
+    map.dispatchEvent(composeEvent);
+  }
+};
+
+
+/**
  * @inheritDoc
  */
 ol.renderer.webgl.Map.prototype.disposeInternal = function() {
@@ -418,6 +437,7 @@ ol.renderer.webgl.Map.prototype.renderFrame = function(frameState) {
   gl.viewport(0, 0, size[0], size[1]);
 
   context.bindBuffer(goog.webgl.ARRAY_BUFFER, this.arrayBuffer_);
+  this.dispatchComposeEvent_(ol.render.EventType.PRECOMPOSE, frameState);
 
   for (i = 0, ii = layersToDraw.length; i < ii; ++i) {
     layer = layersToDraw[i];
@@ -442,6 +462,8 @@ ol.renderer.webgl.Map.prototype.renderFrame = function(frameState) {
     frameState.postRenderFunctions.push(this.loadNextTileTexture_);
     frameState.animate = true;
   }
+
+  this.dispatchComposeEvent_(ol.render.EventType.POSTCOMPOSE, frameState);
 
   this.scheduleRemoveUnusedLayerRenderers(frameState);
 
