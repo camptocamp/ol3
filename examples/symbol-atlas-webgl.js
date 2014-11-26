@@ -14,33 +14,36 @@ goog.require('ol.style.Style');
 var atlasManager = new ol.style.AtlasManager({
   // we increase the initial size so that all symbols fit into
   // a single atlas image
-  initialSize: 512
+  initialSize: getIntParam('atlas', 512)
 });
 
-var symbolInfo = [{
-  opacity: 1.0,
-  scale: 1.0,
-  fillColor: 'rgba(255, 153, 0, 0.4)',
-  strokeColor: 'rgba(255, 204, 0, 0.2)'
-}, {
-  opacity: 0.75,
-  scale: 1.25,
-  fillColor: 'rgba(70, 80, 224, 0.4)',
-  strokeColor: 'rgba(12, 21, 138, 0.2)'
-}, {
-  opacity: 0.5,
-  scale: 1.5,
-  fillColor: 'rgba(66, 150, 79, 0.4)',
-  strokeColor: 'rgba(20, 99, 32, 0.2)'
-}, {
-  opacity: 1.0,
-  scale: 1.0,
-  fillColor: 'rgba(176, 61, 35, 0.4)',
-  strokeColor: 'rgba(145, 43, 20, 0.2)'
-}];
+var differentColors = getIntParam('colors', 24);
+var symbolInfo = function() {
+  var res = [];
+  for (var i = 0; i < differentColors; ++i) {
+    var color = [
+      Math.floor((Math.random() * 255) + 1),
+      Math.floor((Math.random() * 255) + 1),
+      Math.floor((Math.random() * 255) + 1),
+      Math.random() / 2 + 0.5];
+    res.push({
+      opacity: 1.0,
+      scale: 1.0,
+      strokeColor: color,
+      fillColor: color
+    });
+    res.push({
+      opacity: 1.0,
+      scale: 1.0,
+      strokeColor: color
+    });
+  }
+  return res;
+}();
 
-var radiuses = [3, 6, 9, 15, 19, 25];
-var symbolCount = symbolInfo.length * radiuses.length * 2;
+
+var symbolSize = getIntParam('size', 6);
+var radiuses = [symbolSize / 2];
 var symbols = [];
 var i, j;
 for (i = 0; i < symbolInfo.length; ++i) {
@@ -51,9 +54,9 @@ for (i = 0; i < symbolInfo.length; ++i) {
       opacity: info.opacity,
       scale: info.scale,
       radius: radiuses[j],
-      fill: new ol.style.Fill({
+      fill: info.fillColor ? new ol.style.Fill({
         color: info.fillColor
-      }),
+      }) : undefined,
       stroke: new ol.style.Stroke({
         color: info.strokeColor,
         width: 1
@@ -71,9 +74,27 @@ for (i = 0; i < symbolInfo.length; ++i) {
       radius: radiuses[j],
       radius2: radiuses[j] * 0.7,
       angle: 1.4,
-      fill: new ol.style.Fill({
+      fill: info.fillColor ? new ol.style.Fill({
         color: info.fillColor
+      }) : undefined,
+      stroke: new ol.style.Stroke({
+        color: info.strokeColor,
+        width: 1
       }),
+      atlasManager: atlasManager
+    }));
+
+    // rectangle symbol
+    symbols.push(new ol.style.RegularShape({
+      points: 4,
+      opacity: info.opacity,
+      scale: info.scale,
+      radius: radiuses[j],
+      radius2: radiuses[j] * 0.7,
+      angle: 1.4,
+      fill: info.fillColor ? new ol.style.Fill({
+        color: info.fillColor
+      }) : undefined,
       stroke: new ol.style.Stroke({
         color: info.strokeColor,
         width: 1
@@ -82,8 +103,9 @@ for (i = 0; i < symbolInfo.length; ++i) {
     }));
   }
 }
+var symbolCount = symbolInfo.length;
 
-var featureCount = 50000;
+var featureCount = getIntParam('features', 500);
 var features = new Array(featureCount);
 var feature, geometry;
 var e = 25000000;
@@ -121,3 +143,8 @@ var map = new ol.Map({
     zoom: 4
   })
 });
+
+function getIntParam(name, defaultValue) {
+  var res = exampleNS.getParamFromQueryString(name);
+  return res ? parseInt(res, 10) : defaultValue;
+}
