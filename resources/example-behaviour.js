@@ -69,20 +69,25 @@
 
 var exampleNS = {};
 
-exampleNS.getRendererFromQueryString = function() {
+exampleNS.getParamFromQueryString = function(param) {
   var obj = {}, queryString = location.search.slice(1),
       re = /([^&=]+)=([^&]*)/g, m;
 
   while (m = re.exec(queryString)) {
     obj[decodeURIComponent(m[1])] = decodeURIComponent(m[2]);
   }
-  if ('renderers' in obj) {
-    return obj['renderers'].split(',');
-  } else if ('renderer' in obj) {
-    return [obj['renderer']];
+  var params = param + 's';
+  if (params in obj) {
+    return obj[params].split(',');
+  } else if (param in obj) {
+    return [obj[param]];
   } else {
     return undefined;
   }
+};
+
+exampleNS.getRendererFromQueryString = function() {
+  return exampleNS.getParamFromQueryString('renderer');
 };
 
 /*\

@@ -6,6 +6,13 @@ var exampleNS;
 
 
 /**
+ * @param {string} param String.
+ * @return {string} Renderer type.
+ */
+exampleNS.getParamFromQueryString = function(param) {};
+
+
+/**
  * @return {string} Renderer type.
  */
 exampleNS.getRendererFromQueryString = function() {};
