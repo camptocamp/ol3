@@ -17,6 +17,7 @@ var atlasManager = new ol.style.AtlasManager({
   initialSize: getIntParam('atlas', 512)
 });
 
+var opaque = getBoolParam('opaque', false);
 var differentColors = getIntParam('colors', 24);
 var symbolInfo = function() {
   var res = [];
@@ -25,7 +26,7 @@ var symbolInfo = function() {
       Math.floor((Math.random() * 255) + 1),
       Math.floor((Math.random() * 255) + 1),
       Math.floor((Math.random() * 255) + 1),
-      Math.random() / 2 + 0.5];
+      opaque ? 1 : (Math.random() / 2 + 0.5)];
     res.push({
       opacity: 1.0,
       scale: 1.0,
@@ -144,7 +145,18 @@ var map = new ol.Map({
   })
 });
 
-function getIntParam(name, defaultValue) {
+function getFirstStringParam(name, defaultValue) {
   var res = exampleNS.getParamFromQueryString(name);
+  return res ? res[0] : defaultValue;
+}
+
+function getBoolParam(name, defaultValue) {
+  var res = getFirstStringParam(name, undefined);
+  if (!res) return defaultValue;
+  return res.toLowerCase() == 'true' || res[0] == '1';
+}
+
+function getIntParam(name, defaultValue) {
+  var res = getFirstStringParam(name, undefined);
   return res ? parseInt(res, 10) : defaultValue;
 }
