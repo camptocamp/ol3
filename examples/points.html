@@ -1,0 +1,61 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+    <link rel="stylesheet" href="../css/ol.css" type="text/css">
+    <link rel="stylesheet" href="../resources/bootstrap/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="../resources/layout.css" type="text/css">
+    <link rel="stylesheet" href="../resources/bootstrap/css/bootstrap-responsive.min.css" type="text/css">
+    <title>Icon sprites with WebGL example</title>
+  </head>
+  <body>
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="./"><img src="../resources/logo.png"> OpenLayers 3 Examples</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid">
+    <button onclick="startRealTime()">Start Real Time</button> 
+    <button onclick="stopRealTime()">Stop Real Time</button>
+    <button onclick="clearBuffer()">Clear buffer</button>
+    &nbsp;&nbsp;remove points frequency : <input id='removefreq' style='width:20px' value="60">&nbsp;seconds
+    &nbsp;&nbsp;&nbsp;&nbsp;message : <span id="mess" style="background-color:yellow"></span>
+    <div>
+        Nb max points displayed: <input id='nbmaxpoints' style='width:50px' value="95000">&nbsp;
+        &nbsp;Nb points from past time : <input id='nbpointpasttime' style='width:50px' value="95000">&nbsp;
+        &nbsp;Nb points / sec : <input id='nbpointpersec' style='width:50px' value="100">&nbsp;
+        Current nb points displayed : <span id="nbpointsdisplayed">0</span>
+    </div>    
+      <div class="row-fluid">
+        <div class="span12">
+          <div id="map" class="map"></div>
+        </div>
+      </div>
+
+      <div class="row-fluid">
+
+        <div class="span12">
+          <h4 id="title">Symbols with WebGL example</h4>
+          <p id="shortdesc">Using symbols in an atlas with WebGL.</p>
+          <p>See the <a href="points.js" target="_blank">points.js source</a> to see how this is done.</p>
+          <p>Start date&nbsp;:&nbsp;<span id="startdate"></span>&nbsp;</p>
+          <p>Current date&nbsp;:&nbsp;<span id="currentdate"></span></p>
+          <div id="tags">webgl, icon, sprite, vector, point</div>
+        </div>
+      </div>
+    </div>
+
+    <script src="../resources/jquery.min.js" type="text/javascript"></script>
+    <script src="../resources/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="../resources/example-behaviour.js" type="text/javascript"></script>
+    <script src="loader.js?id=points" type="text/javascript"></script>
+
+  </body>
+</html>
