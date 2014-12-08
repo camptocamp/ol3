@@ -79,12 +79,11 @@ for (i = 0; i < symbolInfo.length; ++i) {
   }
 }
 
-var features = [];
 var feature, geometry;
 var e = 10000000;
 
 var vectorSource = new ol.source.Vector({
-  features: features
+  features: []
 });
 var vector = new ol.layer.Vector({
   source: vectorSource
@@ -119,7 +118,7 @@ var map = new ol.Map({
 // add nbpointpersec every second
 // random display
 function initRandomFeatures(nb) {
-  features = [];
+  var features = new Array(nb);
   var counter = vector.getSource().getFeatures().length + 1;
   for (var i = 0; i < nb; ++i) {
     geometry = new ol.geom.Point(
@@ -146,7 +145,7 @@ function initRandomFeatures(nb) {
 // add nbpointpersec every second
 // aligned display
 function initAlignedFeatures(nb) {
-  features = [];
+  var features = new Array(nb);
   var counter = vector.getSource().getFeatures().length;
   for (var i = 0; i < nb; ++i) {
     geometry = new ol.geom.Point([lon, lat]);
@@ -222,7 +221,7 @@ function stopRealTime() {
 function clearBuffer() {
   lon = xmin, lat = ymin;
   document.getElementById('mess').innerHTML = 'clear buffer';
-  vector.getSource().clear();
+  vector.getSource().clear(true);
 }
 // display message state and update date
 function displayMess(mess) {
