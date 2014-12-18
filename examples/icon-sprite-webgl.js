@@ -78,6 +78,7 @@ var vectorSource = new ol.source.Vector({
 var vector = new ol.layer.Vector({
   source: vectorSource
 });
+vector.setRenderOrder(null); // disable sorting in renderer
 
 // Use the "webgl" renderer by default.
 var renderer = exampleNS.getRendererFromQueryString();

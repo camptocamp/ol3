@@ -106,7 +106,7 @@ for (i = 0; i < symbolInfo.length; ++i) {
 }
 var symbolCount = symbolInfo.length;
 
-var featureCount = getIntParam('features', 500);
+var featureCount = getIntParam('features', 30000);
 var features = new Array(featureCount);
 var feature, geometry;
 var e = 25000000;
@@ -128,6 +128,8 @@ var vectorSource = new ol.source.Vector({
 var vector = new ol.layer.Vector({
   source: vectorSource
 });
+vector.setRenderOrder(null); // disable sorting in renderer for performance
+
 
 // Use the "webgl" renderer by default.
 var renderer = exampleNS.getRendererFromQueryString();
