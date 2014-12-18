@@ -115,11 +115,11 @@ var map = new ol.Map({
   })
 });
 
+var counter = 0;
 // add nbpointpersec every second
 // random display
 function initRandomFeatures(nb) {
   var features = new Array(nb);
-  var counter = vector.getSource().getFeatures().length + 1;
   for (var i = 0; i < nb; ++i) {
     geometry = new ol.geom.Point(
         [2 * e * Math.random() - e, 2 * e * Math.random() - e]);
@@ -146,7 +146,6 @@ function initRandomFeatures(nb) {
 // aligned display
 function initAlignedFeatures(nb) {
   var features = new Array(nb);
-  var counter = vector.getSource().getFeatures().length;
   for (var i = 0; i < nb; ++i) {
     geometry = new ol.geom.Point([lon, lat]);
     //geometry.transform(ol.proj.getTransform('EPSG:4326', 'EPSG:3857'));
